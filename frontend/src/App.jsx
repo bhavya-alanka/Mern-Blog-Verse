@@ -1,18 +1,21 @@
 
 import NavBar from "./NavBar.jsx"
-//import SignUp from "./SignUp.jsx"
+import SignUp from "./SignUp.jsx"
 import SignIn from "./SignIn.jsx"
+import Home from "./Home.jsx"
+
+import {Routes,Route} from 'react-router-dom'
+
 function App() {
-//  display:flex;
-//  justify-contet:centre;
-//  alignitness:centre;
 
   return (
-    <div>
-      <NavBar/>
-      <SignIn/>
+    <Routes>
       
-    </div>
+    <Route path="/SignUp" element={<SignUp/>}/>
+    <Route path="/SignIn" element={<SignIn/>}/>
+     <Route path="/Home" element={<Home/>}/>
+      
+    </Routes>
       
   )
 }
