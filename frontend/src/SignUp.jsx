@@ -22,11 +22,14 @@ const SignUp = () => {
     password: "",
     confirmPassword: "",
   });
+  const [isModalOpen, setIsOpenModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const handleSubmit = (event) => {
+    setIsLoading(true)
     event.preventDefault();
     let events = {};
     if (!FormData.fullName) {
@@ -45,14 +48,19 @@ const SignUp = () => {
     }
     if (Object.keys(events).length > 0) {
       setErrors(events);
+      setIsLoading(false)
     } else {
-      setSuccess("your account has been created succesfully");
-      setErrors({
-        fullName: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-      });
+      setTimeOut(() => {
+        setSuccess("your account has been created succesfully");
+        setErrors({
+          fullName: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+        });
+        setIsLoading(false);
+        setIsOpenModal(true);
+      }, 3000);
     }
   };
   const handlePassword = () => {
@@ -63,15 +71,15 @@ const SignUp = () => {
   };
   const handleChange = (event) => {
     setError("");
-    setSuccess("")
+    setSuccess("");
     setFormData((FormData) => ({
       ...FormData,
       [event.target.name]: event.target.value,
     }));
-    setErrors((errors)=>({
-        ...errors,
-        [event.target.name]:""
-    }))
+    setErrors((errors) => ({
+      ...errors,
+      [event.target.name]: "",
+    }));
   };
   return (
     <div className="flex items-center flex-col  gap-5 ">
@@ -171,13 +179,12 @@ const SignUp = () => {
         </div>
         {error && <p className="text-red-500">{error}</p>}
         {success && <p className="text-green-500">{success}</p>}
-        <button
-          type="submit"
-          className="w-[90%] bg-purple-500 py-4 text-white rounded-xl font-semibold"
-        >
-          <p className=" color-purple-500 right-3 top-4 " />
-          Create Account
+        <button input type="submit">
+          <div className="w-[90%] bg-purple-500 py-4 text-white rounded-xl font-semibold ">
+            <p className=" color-purple-500 right-3 top-4 px-60 ">{isLoading ? "Creating":"Create Account"}</p>
+          </div>
         </button>
+
         <div className="border-[0.5px] w-[90%] mt-4 border-gray-400"></div>
         <p className="font-semibold text-gray-700">
           Already have an Account?
@@ -187,6 +194,33 @@ const SignUp = () => {
           Back to home
         </button>
       </form>
+      {isModalOpen && (
+        <div className="fixed h-dvh w-dvw border-purple-400 flex justify-center items-center">
+          <div className="absolute h-dvh w-dvw bg-black opacity-50 "></div>
+          <div className="border-1  border-black p-6 rounded-lg bg-white z-10 ">
+            <p className="text-xl font-bold">
+              Hello Bhavya! Welcome to Blog Verse
+            </p>
+            <p className="mb-4">
+              Your account has been created successfully. you can now sign in
+              and access your account{" "}
+            </p>
+
+            <div className=" flex gap-10">
+              <Link to="./SignIn" className="px-4 py-2 border-1 rounded-xl ">
+                Sign In
+              </Link>
+              <button
+                onClick={() => setIsOpenModal(false)}
+                className="px-4 py-2 rounded bg-gray-400 "
+              >
+                {" "}
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
