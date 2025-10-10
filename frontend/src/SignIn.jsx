@@ -6,7 +6,35 @@ import { Proportions } from "lucide-react";
 import { EyeOff } from "lucide-react";
 import { useState } from "react";
 const SignIn = () => {
-  
+  const [formData, setFormData] = useState({ email: '', password: '' });
+  const [errors, setErrors] = useState({ email: '', password: '' });
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const handleChange = (e) => {
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    setErrors((prev) => ({ ...prev, [e.target.name]: '' }));
+    setError('');
+    setSuccess('');
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    let newErrors = {};
+    if (!formData.email) newErrors.email = 'Please enter your email';
+    if (!formData.password) newErrors.password = 'Please enter your password';
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    
+    setSuccess('Signed in successfully');
+  };
+
+  const handlePassword = () => setShowPassword((p) => !p);
+
   
 
   return (
@@ -18,6 +46,7 @@ const SignIn = () => {
           <p className="text-md text-black-8xl text-center shadow-3xl text-2xl font-bold">
             Sign In<br></br> Access your account
           </p>
+           <form onSubmit={handleSubmit} className='w-[80%] my-5'></form>
           <p className="text-md text-black-700">Email Address</p>
           <div className="relative">
             <input
